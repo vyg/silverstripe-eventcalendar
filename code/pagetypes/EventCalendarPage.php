@@ -41,15 +41,20 @@ class EventCalendarPage extends Page {
 		$eventClass = $this->getEventClass();
 
 		$list = DataList::create($datetimeClass)
+			->filter(array(
+				$relation => $ids
+			))
 			->innerJoin($eventClass, "$relation = \"{$eventClass}\".\"ID\"")
-			->innerJoin("SiteTree", "\"SiteTree\".\"ID\" = \"{$eventClass}\".\"ID\"");
+			->innerJoin("SiteTree", "\"SiteTree\".\"ID\" = \"{$eventClass}\".\"ID\"")
+			->where("Recurring != 1");
+
+		$this->extend('updateEventList', $list);
 
 		return $list;
 	}
 }
 
 class EventCalendarPage_Controller extends Page_Controller {
-
 
 	private static $allowed_actions = [
 		'eventdata'
@@ -88,10 +93,5 @@ class EventCalendarPage_Controller extends Page_Controller {
 		$response->addHeader('Content-Type', 'application/json');
 
 		return $response;
-	}
-
-	public function Events() {
-		$list = $this->data()->getEventList();
-		return $list;
 	}
 }
