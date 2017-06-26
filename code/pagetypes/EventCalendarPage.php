@@ -57,7 +57,8 @@ class EventCalendarPage_Controller extends Page_Controller {
 
 	public function init() {
 		parent::init();
-		Requirements::css('eventcalendar/dist/css/main.css');
+		Requirements::javascript('eventcalendar/dist/js/eventcalendar.js');
+		Requirements::css('eventcalendar/dist/css/eventcalendar.css');
 	}
 
 	public function eventdata($request) {

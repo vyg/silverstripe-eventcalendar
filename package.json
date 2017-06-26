@@ -4,7 +4,9 @@
   "description": "Silverstripe Event Calendar",
   "main": "index.js",
   "scripts": {
-    "build": "node-sass --include-path ./src/scss --include-path ./node_modules src/scss -o dist/css",
+    "build": "npm run build:js && npm run build:css",
+    "build:js": "browserify src/js/index.js > dist/js/eventcalendar.js",
+    "build:css": "node-sass --include-path ./src/scss --include-path ./node_modules src/scss -o dist/css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,6 +21,7 @@
     "fullcalendar": "^3.4.0"
   },
   "devDependencies": {
+    "browserify": "^14.4.0",
     "node-sass": "^4.5.3",
     "npm-css": "^0.2.3"
   }
