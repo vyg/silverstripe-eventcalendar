@@ -1,0 +1,13 @@
+{
+    "name": "voyage/silverstripe-eventcalendar",
+    "description": "Simple event calendar for Silverstripe",
+    "keywords": ["silverstripe", "events"],
+    "require": {
+        "php": ">=5.3.0",
+        "silverstripe/framework": ">=3.1",
+        "silverstripe/cms": ">=3.1"
+    },
+  	"extra": {
+  		"installer-name": "eventcalendar"
+  	}
+}
