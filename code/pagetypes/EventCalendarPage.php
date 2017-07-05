@@ -33,12 +33,14 @@ class EventCalendarPage extends Page {
 		return $this->dateToEventRelation_cache;
 	}
 
-	public function getEventList() {
+	public function getEventList($start, $end, $filter = null) {
 		$children = $this->AllChildren();
 		$ids = $children->column('ID');
 		$datetimeClass = $this->getDateTimeClass();
 		$relation = $this->getDateToEventRelation();
 		$eventClass = $this->getEventClass();
+
+
 
 		$list = DataList::create($datetimeClass)
 			->filter(array(
@@ -47,6 +49,26 @@ class EventCalendarPage extends Page {
 			->innerJoin($eventClass, "$relation = \"{$eventClass}\".\"ID\"")
 			->innerJoin("SiteTree", "\"SiteTree\".\"ID\" = \"{$eventClass}\".\"ID\"")
 			->where("Recurring != 1");
+
+		if($start && $end) {
+			$list = $list->where("
+					(Start <= '$start' AND End >= '$end') OR
+					(Start BETWEEN '$start' AND '$end') OR
+					(End BETWEEN '$start' AND '$end')
+					");
+		}
+
+		else if($start) {
+			$list = $list->where("(Start >= '$start' OR End > '$start')");
+		}
+
+		else if($end) {
+			$list = $list->where("(End <= '$end' OR Start < '$end')");
+		}
+
+		if($filter) {
+			$list = $list->where($filter);
+		}
 
 		$this->extend('updateEventList', $list);
 
@@ -70,7 +92,10 @@ class EventCalendarPage_Controller extends Page_Controller {
 		$start = $request->getVar('start');
 		$end = $request->getVar('end');
 
-		$events = $this->data()->getEventList();
+		$events = $this->data()->getEventList(
+			$start,
+			$end
+		);
 
 		$eventsArray = [];
 
