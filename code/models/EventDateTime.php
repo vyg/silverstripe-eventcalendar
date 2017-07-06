@@ -12,8 +12,8 @@ class EventDateTime extends DataObject {
 	];
 
 	private static $summary_fields = [
-		'FormattedStart' => 'Start Time',
-		'FormattedEnd' => 'End Time'
+		'FormattedStartDateTime' => 'Start Time',
+		'FormattedEndDateTime' => 'End Time'
 	];
 
 	public function getCMSFields() {
@@ -37,23 +37,30 @@ class EventDateTime extends DataObject {
 
 	public function Link() {
 		return $this->Event()->Link();
-		// return Controller::join_links($this->Event()->Link(),"?date=".$this->Start);
 	}
 
 	public function getTitle() {
 		return $this->Event()->Title;
 	}
 
+	public function getFormattedStartDateTime() {
+		if(!$this->Start) return "--";
+		return $this->obj('Start')->Format('d M Y g:ia');
+	}
+
+	public function getFormattedEndDateTime() {
+		if(!$this->End) return "--";
+		return $this->obj('End')->Format('d M Y g:ia');
+	}
+
 	public function getFormattedStart() {
 		if(!$this->Start) return "--";
-		return $this->obj('Start')->Format('m-d-Y');
-		// return CalendarUtil::get_date_format() == "mdy" ? $this->obj('StartDate')->Format('m-d-Y') : $this->obj('StartDate')->Format('d-m-Y');
+		return $this->obj('Start')->Format('Y-m-d H:i:s');
 	}
 
 	public function getFormattedEnd() {
 		if(!$this->End) return "--";
-		return $this->obj('End')->Format('m-d-Y');
-		// return CalendarUtil::get_date_format() == "mdy" ? $this->obj('StartDate')->Format('m-d-Y') : $this->obj('StartDate')->Format('d-m-Y');
+		return $this->obj('End')->Format('Y-m-d H:i:s');
 	}
 
 	public function getFormattedStartTime() {
